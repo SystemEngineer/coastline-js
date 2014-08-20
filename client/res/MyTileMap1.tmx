@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="meta_tiles" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="meta_tiles.png" width="67" height="34"/>
+  <tile id="0">
+   <properties>
+    <property name="Blockage" value="True"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="Port" value="True"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="3" name="New_Town_Ex" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="New_Town_Ex.png" width="544" height="416"/>
+ </tileset>
+ <layer name="Background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1+GNgjAAgNEOeK6iG4gTeK7hFowmJJI0PTyqFlrN+/EiQhqgX0qgDyH0kePgJ7Ir5JSchzx6bK+7mzumRzstRnps22Gpx3nwG/RYSzr/Sz0m0zrRo2yLeDtnfUz0WK9Hl2znjNWjfIu59aBH3R5z+3PGX4MeLbE+2rAfHMLf991325wauLdP5HuwLXq0xfd5m6YupXpcGrinb5Cul2eNY7VYr8sj15l9OgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQUndX+zr4v4dOdVrEv+mxWO1r/WbpPOf00GWbJn14PM961GmxNM9arN8j/W++6/bwDILX3ADMIZoL
+  </data>
+ </layer>
+ <objectgroup name="PlayerLayer" width="100" height="100">
+  <object name="PlayerStartPoint" x="160" y="288" width="32" height="32"/>
+ </objectgroup>
+ <layer name="LandLayer" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1zEKgEAMAMHo/x9tbSFy4sEWM5APZEmRmbtj47BOjxY9WvRo0aNJjxY9WvRo0aPlHD1K3EfDjg56fKdHix4tejTp0aRF09u+n/4VAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIC/XaCTAYU=
+  </data>
+ </layer>
+</map>

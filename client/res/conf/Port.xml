@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<PortConfig>
+    <6:9>
+        <PortName>Lisbon</PortName>
+        <PortImg>Lisbon.png</PortImg>
+        <PortIntro>这里是里斯本，葡萄牙首都</PortIntro>
+    </6:9>
+    <18:17>
+        <PortName>Sevilla</PortName>
+        <PortImg>Sevilla.png</PortImg>
+        <PortIntro>这里是塞维利亚，西班牙首都</PortIntro>
+    </18:17>
+</PortConfig>
