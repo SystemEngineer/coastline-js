@@ -6,6 +6,7 @@ var BackgroundLayer = cc.Layer.extend({
     _mapLandLayer : null,
     _mapPlayerStartPoint : null,
     _playerSprite : null,
+    _networkTool: null,
     ctor:function(){
         this._super();
         this.init();
@@ -34,8 +35,6 @@ var BackgroundLayer = cc.Layer.extend({
         //Add player ship sprite
         var pos = this._backgroundMap.getPosition();
         cc.log("x = " + pos.x + " y = " + pos.y);
-        //var playerStartX = this._backgroundLayer._mapPlayerStartPoint.x;
-        //var playerStartY = this._backgroundLayer._mapPlayerStartPoint.y;
         var playerStartX = 64;
         var playerStartY = 384;
         this._playerSprite = new FloatingSprites();
@@ -63,22 +62,57 @@ var BackgroundLayer = cc.Layer.extend({
                 var delta = cc.p(moveX,moveY);
                 //cannot use 'this', get target by tag
                 var playerSprite = event.getCurrentTarget().getChildByTag(1);
-                var viewLayer = event.getCurrentTarget();
+                var backgroundLayer = event.getCurrentTarget();
                 var newPlayerPos = cc.pAdd(playerSprite.getPosition(),delta);
-                playerSprite.setPosition(newPlayerPos);
-                viewLayer.setViewPointCenter(newPlayerPos,delta);
-
-                event.getCurrentTarget().getTileCoordForPosition(newPlayerPos);
+                var playerCoord = backgroundLayer.getTileCoordForPosition(newPlayerPos);
+                if(!backgroundLayer.isBlockageTile(playerCoord)){
+                    if(backgroundLayer.isPortTile(playerCoord)){
+                        //backgroundLayer.getPortConfigByCoord(playerCoord);
+                        window.alert("In port!")
+                    }
+                    playerSprite.setPosition(newPlayerPos);
+                    backgroundLayer.setViewPointCenter(newPlayerPos,delta);
+                }
             }
         });
         cc.eventManager.addListener(listener,this);
+        //this._networkTool = new NetworkTools();
 
+    },
+    isBlockageTile:function(tileCoord){
+        var tileGID = this._mapLandLayer.getTileGIDAt(tileCoord);
+        if(tileGID){
+            var prop = this._backgroundMap.propertiesForGID(tileGID);
+            if(prop){
+                if("True" == prop["Blockage"]){
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+    isPortTile:function(tileCoord){
+        var tileGID = this._mapLandLayer.getTileGIDAt(tileCoord);
+        if(tileGID){
+            var prop = this._backgroundMap.propertiesForGID(tileGID);
+            if(prop){
+                if("True" == prop["Port"]){
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+    getPortConfigByCoord:function(playerCoord){
+        //TODO: Send request to server to get port configuration
+        //Now it is just a test
+        NetworkTools.doWsRequestTest();
     },
     getTileCoordForPosition:function(pos){
         var tileWidth = this._backgroundMap.getTileSize().width;
         var tileHeight = this._backgroundMap.getTileSize().height;
-        var x = pos.x/tileWidth;
-        var y = (this._backgroundMap.getMapSize().height * tileHeight - cc.winSize.height +  pos.y)/tileHeight;
+        var x = Math.floor(pos.x/tileWidth);
+        var y = Math.floor((cc.winSize.height - pos.y)/tileHeight);
 
         return cc.p(x,y);
     },
@@ -93,6 +127,7 @@ var BackgroundLayer = cc.Layer.extend({
         var winSize = cc.winSize;
         var viewPos = this.getPosition();
         //window.alert(newPlayerPos.x + " : " + newPlayerPos.y + " --- " + viewPos.x + " : " + viewPos.y  + " --- " + winSize.width + " : " + winSize.height);
+        //TODO: Should check the position at the other 3 corners of the map
         if(newPlayerPos.x > winSize.width/2){
            viewPos.x = viewPos.x - delta.x;
         }

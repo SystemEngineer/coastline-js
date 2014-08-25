@@ -15,6 +15,7 @@
         "src/app.js",
         "src/global.js",
         "src/BackgroundLayer.js",
-        "src/FloatingSprites.js"
+        "src/FloatingSprites.js",
+        "src/tools/NetworkTools.js"
     ]
 }
