@@ -46,7 +46,7 @@ var BackgroundLayer = cc.Layer.extend({
         var listener = cc.EventListener.create({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed:function(keyCode, event){
-                var keyNumber = keyCode.toString()
+                var keyNumber = keyCode.toString();
 
                 var moveX = 0;
                 var moveY = 0;
@@ -67,8 +67,8 @@ var BackgroundLayer = cc.Layer.extend({
                 var playerCoord = backgroundLayer.getTileCoordForPosition(newPlayerPos);
                 if(!backgroundLayer.isBlockageTile(playerCoord)){
                     if(backgroundLayer.isPortTile(playerCoord)){
-                        //backgroundLayer.getPortConfigByCoord(playerCoord);
-                        window.alert("In port!")
+                        window.alert("In port!");
+                        backgroundLayer.getPortConfigByCoord(playerCoord);
                     }
                     playerSprite.setPosition(newPlayerPos);
                     backgroundLayer.setViewPointCenter(newPlayerPos,delta);
@@ -106,7 +106,55 @@ var BackgroundLayer = cc.Layer.extend({
     getPortConfigByCoord:function(playerCoord){
         //TODO: Send request to server to get port configuration
         //Now it is just a test
-        NetworkTools.doWsRequestTest();
+        //NetworkTools.doWsRequestTest();
+        var pomelo = window.pomelo;
+
+        var route = 'gate.gateHandler.queryEntry';
+        var uid = "uid";
+        var rid = "rid";
+        var username = "username";
+        pomelo.disconnect();
+        pomelo.init({
+            host: "127.0.0.1",
+            port: 3010,
+            log: true
+        }, function() {
+            var route = "connector.entryHandler.entry";
+            pomelo.request(route, {
+                username: username,
+                rid: rid
+            }, function(data) {
+                window.alert(JSON.stringify(data));
+            });
+        });
+
+        /*
+        pomelo.init({
+            host: "127.0.0.1",
+            port: 3005,
+            log: true
+        }, function() {
+            pomelo.request(route, {
+                uid: uid
+            }, function(data) {
+                pomelo.disconnect();
+                pomelo.init({
+                    host: data.host,
+                    port: data.port,
+                    log: true
+                }, function() {
+                    var route = "connector.entryHandler.enter";
+                    pomelo.request(route, {
+                        username: username,
+                        rid: rid
+                    }, function(data) {
+                        cc.log(JSON.stringify(data));
+                        chatSend();
+                    });
+                });
+            });
+        });
+        */
     },
     getTileCoordForPosition:function(pos){
         var tileWidth = this._backgroundMap.getTileSize().width;
@@ -137,4 +185,4 @@ var BackgroundLayer = cc.Layer.extend({
         }
         this.setPosition(viewPos);
     }
-})
+});

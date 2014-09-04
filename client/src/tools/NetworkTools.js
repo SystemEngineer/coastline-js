@@ -12,10 +12,11 @@ var NetworkTools = {
     },
     doWsRequestTest: function(){
         var self = this;
-        this._wsiSendText = new WebSocket("ws://echo.websocket.org");
+        //this._wsiSendText = new WebSocket("ws://echo.websocket.org");
+        this._wsiSendText = new WebSocket("ws://192.168.10.133:5173");
         this._wsiSendText.onopen = function(evt) {
             window.alert("Send Text WS was opened");
-            self._wsiSendText.send("Hello WebSocket中文, I'm a text message.");
+            self._wsiSendText.send("Hello LibWebSocket中文, I'm a text message.");
         };
 
         this._wsiSendText.onmessage = function(evt) {
