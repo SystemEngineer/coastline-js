@@ -67,7 +67,6 @@ var BackgroundLayer = cc.Layer.extend({
                 var playerCoord = backgroundLayer.getTileCoordForPosition(newPlayerPos);
                 if(!backgroundLayer.isBlockageTile(playerCoord)){
                     if(backgroundLayer.isPortTile(playerCoord)){
-                        window.alert("In port!");
                         backgroundLayer.getPortConfigByCoord(playerCoord);
                     }
                     playerSprite.setPosition(newPlayerPos);
@@ -104,8 +103,7 @@ var BackgroundLayer = cc.Layer.extend({
         return false;
     },
     getPortConfigByCoord:function(playerCoord){
-        //TODO: Send request to server to get port configuration
-        //Now it is just a test
+        //This is just a test
         //NetworkTools.doWsRequestTest();
         var pomelo = window.pomelo;
 
@@ -113,22 +111,32 @@ var BackgroundLayer = cc.Layer.extend({
         var uid = "uid";
         var rid = "rid";
         var username = "username";
+        var portConfig = "";
+        //self can be send to closure.
+        var self = this;
         pomelo.disconnect();
         pomelo.init({
             host: "127.0.0.1",
             port: 3010,
             log: true
         }, function() {
-            var route = "connector.entryHandler.entry";
+            var route = "connector.entryHandler.getPortConfig";
             pomelo.request(route, {
                 username: username,
-                rid: rid
+                rid: rid,
+                x: playerCoord.x,
+                y: playerCoord.y
             }, function(data) {
-                window.alert(JSON.stringify(data));
+                portConfig=JSON.stringify(data);
+                window.alert(portConfig);
+                //receive response, do something,access 'this' object by 'self'
+                self.createPortLayerByConfig(portConfig)
             });
         });
+        return portConfig;
 
         /*
+        //connection style for gate proxy
         pomelo.init({
             host: "127.0.0.1",
             port: 3005,
@@ -184,5 +192,8 @@ var BackgroundLayer = cc.Layer.extend({
            viewPos.y = viewPos.y - delta.y;
         }
         this.setPosition(viewPos);
-    }
+    },
+    createPortLayerByConfig:function(portConfig){
+        window.alert("---"+portConfig);
+    },
 });
