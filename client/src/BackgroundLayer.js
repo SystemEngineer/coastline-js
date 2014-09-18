@@ -3,6 +3,7 @@
  */
 var BackgroundLayer = cc.Layer.extend({
     _backgroundMap : null,
+    _portLayer : null,
     _mapLandLayer : null,
     _mapPlayerStartPoint : null,
     _playerSprite : null,
@@ -32,9 +33,12 @@ var BackgroundLayer = cc.Layer.extend({
         */
         this.addChild(this._backgroundMap);
 
+        //Add port layer
+        this._portLayer = new PortPopupLayer();
+        this.addChild(this._portLayer);
+
         //Add player ship sprite
         var pos = this._backgroundMap.getPosition();
-        cc.log("x = " + pos.x + " y = " + pos.y);
         var playerStartX = 64;
         var playerStartY = 384;
         this._playerSprite = new FloatingSprites();
@@ -68,6 +72,8 @@ var BackgroundLayer = cc.Layer.extend({
                 if(!backgroundLayer.isBlockageTile(playerCoord)){
                     if(backgroundLayer.isPortTile(playerCoord)){
                         backgroundLayer.getPortConfigByCoord(playerCoord);
+                    }else{
+                        backgroundLayer._portLayer.removeAll();
                     }
                     playerSprite.setPosition(newPlayerPos);
                     backgroundLayer.setViewPointCenter(newPlayerPos,delta);
@@ -127,10 +133,11 @@ var BackgroundLayer = cc.Layer.extend({
                 x: playerCoord.x,
                 y: playerCoord.y
             }, function(data) {
-                portConfig=JSON.stringify(data);
-                window.alert(portConfig);
+                portConfigStr=JSON.stringify(data);
+                cc.log(portConfigStr);
                 //receive response, do something,access 'this' object by 'self'
-                self.createPortLayerByConfig(portConfig)
+                //data is the JSON object
+                self.createPortLayerByConfig(data)
             });
         });
         return portConfig;
@@ -194,6 +201,7 @@ var BackgroundLayer = cc.Layer.extend({
         this.setPosition(viewPos);
     },
     createPortLayerByConfig:function(portConfig){
-        window.alert("---"+portConfig);
+        cc.log("---"+portConfig.port_img);
+        this._portLayer.createPortWindow(portConfig.port_name,portConfig.port_img,portConfig.port_desc)
     },
 });
