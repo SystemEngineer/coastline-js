@@ -81,6 +81,41 @@ var BackgroundLayer = cc.Layer.extend({
             }
         });
         cc.eventManager.addListener(listener,this);
+        cc.eventManager.addListener({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches: true,
+            onTouchBegan: function(){return true},
+            onTouchEnded: function (touch, unused_event){
+                cc.log("touch ended.");
+                var actionTo1 = cc.rotateTo(0, 0, 180);
+                var actionTo2 = cc.rotateTo(0, 0, 0);
+                var touchLocation = touch.getLocation();
+                var backgroundLayer = unused_event.getCurrentTarget();
+                var playerSprite = unused_event.getCurrentTarget().getChildByTag(1);
+
+                touchLocation = backgroundLayer.convertToNodeSpace(touchLocation);
+
+                var playerPos = playerSprite.getPosition();
+                var diff = cc.pSub(touchLocation,playerPos);
+                cc.log("touchLocation is " + touchLocation.x);
+                if (diff.x > 0) {
+                    //Player may be fliped according its directory
+                    playerSprite.runAction(actionTo2);
+                }
+                else {
+                    playerSprite.runAction(actionTo1);
+                }
+
+                if (touchLocation.x <= (backgroundLayer._backgroundMap.getMapSize().width * backgroundLayer._backgroundMap.getTileSize().width) &&
+                    touchLocation.y <= (backgroundLayer._backgroundMap.getMapSize().height * backgroundLayer._backgroundMap.getTileSize().height) &&
+                    touchLocation.y >= 0 &&
+                    touchLocation.x >= 0)
+                {
+                    playerSprite.moveTowardTarget(touchLocation);
+                    cc.log("move finished")
+                }
+            }
+        },this);
         //this._networkTool = new NetworkTools();
 
     },
@@ -95,6 +130,12 @@ var BackgroundLayer = cc.Layer.extend({
             }
         }
         return false;
+    },
+    isValidTile:function(tileCoord){
+        return !((tileCoord.x < 0) || (tileCoord.y < 0)
+            || (tileCoord.x > this._backgroundMap.getMapSize().width)
+            || (tileCoord.y > this._backgroundMap.getMapSize().height));
+
     },
     isPortTile:function(tileCoord){
         var tileGID = this._mapLandLayer.getTileGIDAt(tileCoord);
@@ -182,8 +223,10 @@ var BackgroundLayer = cc.Layer.extend({
     getPositionForTileCoord:function(coord){
         var tileWidth = this._backgroundMap.getTileSize().width;
         var tileHeight = this._backgroundMap.getTileSize().height;
+
         var x = coord.x * tileWidth + tileWidth/2;
-        var y = this._backgroundMap.getMapSize.height * tileHeight - coord.y * tileHeight - tileHeight/2;
+        //var y = this._backgroundMap.getMapSize().height * tileHeight - coord.y * tileHeight - tileHeight/2;
+        var y = cc.winSize.height - coord.y * tileHeight;
         return cc.p(x,y);
     },
     setViewPointCenter:function(newPlayerPos, delta) {
@@ -204,4 +247,26 @@ var BackgroundLayer = cc.Layer.extend({
         cc.log("---"+portConfig.port_img);
         this._portLayer.createPortWindow(portConfig.port_name,portConfig.port_img,portConfig.port_desc)
     },
+    accessibleTilesAdjacentToTileCoord:function(curCoord){
+        //do not set the array len, otherwise push will add element
+        var tmp = new Array();
+
+        var p1 = cc.p(curCoord.x, curCoord.y - 1);
+        if((this.isValidTile(p1)) && (!this.isBlockageTile(p1))){
+            tmp.push(p1);
+        }
+        var p2 = cc.p(curCoord.x, curCoord.y + 1);
+        if((this.isValidTile(p2)) && (!this.isBlockageTile(p2))){
+            tmp.push(p2);
+        }
+        var p3 = cc.p(curCoord.x - 1, curCoord.y);
+        if((this.isValidTile(p3)) && (!this.isBlockageTile(p3))){
+            tmp.push(p3);
+        }
+        var p4 = cc.p(curCoord.x +1 , curCoord.y);
+        if((this.isValidTile(p4)) && (!this.isBlockageTile(p4))){
+            tmp.push(p4);
+        }
+        return tmp;
+    }
 });
