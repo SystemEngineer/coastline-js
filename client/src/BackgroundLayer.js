@@ -92,12 +92,13 @@ var BackgroundLayer = cc.Layer.extend({
                 var touchLocation = touch.getLocation();
                 var backgroundLayer = unused_event.getCurrentTarget();
                 var playerSprite = unused_event.getCurrentTarget().getChildByTag(1);
+                var winSize = cc.winSize;
 
                 touchLocation = backgroundLayer.convertToNodeSpace(touchLocation);
 
                 var playerPos = playerSprite.getPosition();
                 var diff = cc.pSub(touchLocation,playerPos);
-                cc.log("touchLocation is " + touchLocation.x);
+                cc.log("touchLocation is (" + touchLocation.x + "," + touchLocation.y + ")");
                 if (diff.x > 0) {
                     //Player may be fliped according its directory
                     playerSprite.runAction(actionTo2);
@@ -106,9 +107,11 @@ var BackgroundLayer = cc.Layer.extend({
                     playerSprite.runAction(actionTo1);
                 }
 
-                if (touchLocation.x <= (backgroundLayer._backgroundMap.getMapSize().width * backgroundLayer._backgroundMap.getTileSize().width) &&
-                    touchLocation.y <= (backgroundLayer._backgroundMap.getMapSize().height * backgroundLayer._backgroundMap.getTileSize().height) &&
-                    touchLocation.y >= 0 &&
+                var totalWidth = backgroundLayer._backgroundMap.getMapSize().width * backgroundLayer._backgroundMap.getTileSize().width;
+                var totalHeight = backgroundLayer._backgroundMap.getMapSize().height * backgroundLayer._backgroundMap.getTileSize().height;
+                if (touchLocation.x <= (totalWidth) &&
+                    touchLocation.y <= winSize.height &&
+                    touchLocation.y >= (winSize.height - (totalHeight)) &&
                     touchLocation.x >= 0)
                 {
                     playerSprite.moveTowardTarget(touchLocation);
@@ -232,14 +235,20 @@ var BackgroundLayer = cc.Layer.extend({
     setViewPointCenter:function(newPlayerPos, delta) {
         var winSize = cc.winSize;
         var viewPos = this.getPosition();
-        //window.alert(newPlayerPos.x + " : " + newPlayerPos.y + " --- " + viewPos.x + " : " + viewPos.y  + " --- " + winSize.width + " : " + winSize.height);
+        cc.log(newPlayerPos.x + " : " + newPlayerPos.y + " --- " + viewPos.x + " : " + viewPos.y  + " --- " + winSize.width + " : " + winSize.height);
         //TODO: Should check the position at the other 3 corners of the map
         if(newPlayerPos.x > winSize.width/2){
-           viewPos.x = viewPos.x - delta.x;
+           //viewPos.x = viewPos.x - delta.x;
+            viewPos.x = winSize.width/2 - newPlayerPos.x;
+        }else{
+            viewPos.x = 0;
         }
         //Attention: top-left coord of player is (0, winSize.height)
         if(newPlayerPos.y < winSize.height/2 ){
-           viewPos.y = viewPos.y - delta.y;
+           //viewPos.y = viewPos.y - delta.y;
+            viewPos.y = winSize.height/2 - newPlayerPos.y;
+        }else{
+            viewPos.y = 0;
         }
         this.setPosition(viewPos);
     },

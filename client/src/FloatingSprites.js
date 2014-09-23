@@ -80,15 +80,23 @@ var FloatingSprites = cc.Sprite.extend({
         //cc.log("move to : " + step._Position.x + ":" + step._Position.y);
         var stepPos = parentLayer.getPositionForTileCoord(step._Position);
         //MoveTo* moveAction = MoveTo::create(0.3f, stepPos);
-        var moveAction = cc.moveTo(0.5,stepPos);
+        var moveAction = cc.moveTo(0.3,stepPos);
         var moveCallback = new cc.CallFunc(this.moveStepByStep,this);
         var moveSeq = cc.sequence(moveAction,moveCallback);
 
         moveSeq.setTag(this.MOVING_TAG);
         this.runAction(moveSeq);
         if(this._FoundPathStepsList.length == 0){
-            parentLayer._playerSprite.setPosition(stepPos);
-            //parentLayer.setViewPointCenter(stepPos);
+            var playerCoord = parentLayer.getTileCoordForPosition(stepPos);
+            if(!parentLayer.isBlockageTile(playerCoord)){
+                if(parentLayer.isPortTile(playerCoord)){
+                    parentLayer.getPortConfigByCoord(playerCoord);
+                }else{
+                    parentLayer._portLayer.removeAll();
+                }
+                parentLayer._playerSprite.setPosition(stepPos);
+                parentLayer.setViewPointCenter(stepPos);
+            }
         }
     },
     moveTowardTarget:function(targetPos){

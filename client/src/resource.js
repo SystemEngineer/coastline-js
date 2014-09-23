@@ -5,6 +5,7 @@ var res = {
     map_png : "res/New_Town_Ex.png",
     ship_png : "res/ship1.png",
     map_meta_png : "res/meta_tiles.png",
+    port_png : "res/port.png",
     map_tmx : "res/MyTileMap1.tmx"
 };
 

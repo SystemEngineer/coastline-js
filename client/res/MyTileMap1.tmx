@@ -16,9 +16,17 @@
  <tileset firstgid="3" name="New_Town_Ex" tilewidth="32" tileheight="32" spacing="1" margin="1">
   <image source="New_Town_Ex.png" width="544" height="416"/>
  </tileset>
+ <tileset firstgid="195" name="port" tilewidth="32" tileheight="32">
+  <image source="port.png" width="32" height="32"/>
+ </tileset>
  <layer name="Background" width="100" height="60">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3XYQqCMBiA4R2wrlI3SE9QXcNbeLQMGshauGjaiufHAzIZMl8+0DGEMM6cJruZfSV98hzK6LG97iF3T492WtzpsW2HpR7nySXosZb0/S/1iOKc6FG3xfy6ZD4iPdbr0SXXJXv1qN8iNw96fLdHbr1k/xD0aIn5aMNhcgzP37uftukbONsv8j/YFj3a4v+8TbFLrR7XBs70D9J5edd9rxbrdXllyKzpAAAAAAAAAAAAAAAAAAAAAEBtN0MTVB/AXQAA
+   H4sIAAAAAAAAA+3XYQqCMBiA4R2wrlI3KE9QHcmjpdBAluCkaV/x/HhgKEP05QPXp5T6icvgMHFspCueQx099nd9mbunR5wWIz327bDU4za4Jz22Un7/pR5ZnhM92raYrmvmI9Njux7XYl2zV4/2LebmQY/v9pi7XrNfj1j0iOE0OKf3/91P23QB3u0XOQ/Gokcszucx5S6tejwCvNM/KOdlrXGvFtt1WUMHAAAAAAAAAAAAAAAAAAAAAFp7AumkKmDAXQAA
+  </data>
+ </layer>
+ <layer name="ObjectLayer" width="100" height="60">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3XIQEAAAjEwO9fi2JIFBbMXYLZJQAAADDqOwAAAGDhVwAAAAAAAAAAAAAAAAAAAAC40Hf/fpTAXQAA
   </data>
  </layer>
  <objectgroup name="PlayerLayer" width="100" height="60">
