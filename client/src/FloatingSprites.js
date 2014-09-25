@@ -89,13 +89,13 @@ var FloatingSprites = cc.Sprite.extend({
         if(this._FoundPathStepsList.length == 0){
             var playerCoord = parentLayer.getTileCoordForPosition(stepPos);
             if(!parentLayer.isBlockageTile(playerCoord)){
+                parentLayer.setViewPointCenter(stepPos);
                 if(parentLayer.isPortTile(playerCoord)){
                     parentLayer.getPortConfigByCoord(playerCoord);
                 }else{
                     parentLayer._portLayer.removeAll();
                 }
                 parentLayer._playerSprite.setPosition(stepPos);
-                parentLayer.setViewPointCenter(stepPos);
             }
         }
     },
@@ -120,7 +120,7 @@ var FloatingSprites = cc.Sprite.extend({
         this._ClosedStepsList = [];
         this._FoundPathStepsList = [];
         //Add current position(start position)
-        var tmpStep = PathStep();
+        var tmpStep = new PathStep();
         tmpStep.setPosition(fromTileCoord);
         this.insertInOpenSteps(tmpStep);
         var count = 0;
@@ -144,7 +144,7 @@ var FloatingSprites = cc.Sprite.extend({
             //Check all adjacent tiles, put it into open steps array according to the F score
             var adjStepPoints = parentLayer.accessibleTilesAdjacentToTileCoord(currentStep._Position);
             for(var i = 0; i < adjStepPoints.length; i++){
-                var step = PathStep();
+                var step = new PathStep();
                 step.setPosition(adjStepPoints[i]);
 
                 if(this.getStepIndex(this._ClosedStepsList,step) != -1){

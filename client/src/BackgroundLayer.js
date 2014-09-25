@@ -18,7 +18,7 @@ var BackgroundLayer = cc.Layer.extend({
         var winSize = cc.winSize;
 
         //Add tmx map
-        this._backgroundMap = cc.TMXTiledMap.create(res.map_tmx);
+        this._backgroundMap = new cc.TMXTiledMap(res.map_tmx);
         //To show map at top-left of the window, the anchor should be set to top-left of the map
         this._backgroundMap.setPosition(cc.p(0,winSize.height));
         this._backgroundMap.setAnchorPoint(cc.p(0,1));
@@ -83,7 +83,7 @@ var BackgroundLayer = cc.Layer.extend({
         cc.eventManager.addListener(listener,this);
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches: true,
+            swallowTouches: false,
             onTouchBegan: function(){return true},
             onTouchEnded: function (touch, unused_event){
                 cc.log("touch ended.");
