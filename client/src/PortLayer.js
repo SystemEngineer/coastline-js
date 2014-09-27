@@ -24,8 +24,16 @@ var PortPopupLayer = cc.Layer.extend({
         if(!this._portBgSprite){
             cc.log("create port img");
             this._portBgSprite = new cc.Sprite(portImage);
-            this._portBgSprite.setPosition(cc.p(parentLayer.getPosition().x + winSize.width/2,
-                                                parentLayer.getPosition().y));
+            //The game view has been placed to the position where makes player sprite at center
+            var playerSpritePos = parentLayer.getChildByTag(1);
+            var portBgSpritePos = cc.p(playerSpritePos.x, playerSpritePos.y);
+            if(playerSpritePos.y > winSize.height/2){
+                portBgSpritePos.y = winSize.height/2;
+            }
+            if(playerSpritePos.x < winSize.width/2){
+                portBgSpritePos.x = winSize.width/2;
+            }
+            this._portBgSprite.setPosition(portBgSpritePos);
             this.addChild(this._portBgSprite,100,10);
         }else{
             return;
@@ -54,8 +62,8 @@ var PortPopupLayer = cc.Layer.extend({
             //var closeItemSize = closeItem.getContentSize();
             //closeItem.setPosition(cc.p(winSize.width/2 + portBgSpriteSize.width/2,winSize.height/2 + portBgSpriteSize.height/2));
             cc.log(parentLayer.getPosition().x +":" + parentLayer.getPosition().y)
-            closeItem.setPosition(cc.p(parentLayer.getPosition().x + portBgSpriteSize.width/2,
-                                        parentLayer.getPosition().y +portBgSpriteSize.height/2))
+            closeItem.setPosition(cc.p(this._portBgSprite.getPosition().x + portBgSpriteSize.width/2,
+                    this._portBgSprite.getPosition().y +portBgSpriteSize.height/2))
             this._portCloseButton = new cc.Menu(closeItem);
             this._portCloseButton.setPosition(cc.p(0,0));
             this.addChild(this._portCloseButton,102,12);

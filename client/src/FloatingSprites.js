@@ -88,6 +88,7 @@ var FloatingSprites = cc.Sprite.extend({
         this.runAction(moveSeq);
         if(this._FoundPathStepsList.length == 0){
             var playerCoord = parentLayer.getTileCoordForPosition(stepPos);
+            cc.log("====> Current position is [" + playerCoord.x + ", " + playerCoord.y + "] <=====");
             if(!parentLayer.isBlockageTile(playerCoord)){
                 parentLayer.setViewPointCenter(stepPos);
                 if(parentLayer.isPortTile(playerCoord)){
